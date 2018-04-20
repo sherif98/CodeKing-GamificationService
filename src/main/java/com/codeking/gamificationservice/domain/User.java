@@ -5,6 +5,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Map;
 import java.util.Set;
 
 @Document(collection = "user")
@@ -19,9 +20,11 @@ public class User {
     @Id
     private String userId;
 
-    private String userName;
     private Set<Badge> badges;
 
     @Indexed
     private int score;
+
+
+    private Map<ProgrammingLanguage, Set<String>> programmingLanguageToSolvedProblems;
 }

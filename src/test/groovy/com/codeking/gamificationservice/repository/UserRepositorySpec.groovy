@@ -17,10 +17,8 @@ class UserRepositorySpec extends Specification {
     def "should return ten users with highest score"() {
         given: "20 users"
         def users = (1..20).collect { n ->
-            def userName = "user" + n
             return User.builder()
                     .score(n)
-                    .userName(userName)
                     .userId(n.toString())
                     .build()
         }
