@@ -13,8 +13,10 @@ import com.codeking.gamificationservice.service.dto.UserAttempt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
-import java.util.function.Function;
+import java.util.EnumSet;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -39,12 +41,13 @@ public class GameServiceImpl implements GameService {
     private void processAcceptedUserAttempt(UserAttempt userAttempt) {
         int scoreToBeAdded = getProblemScore(userAttempt.getProblemId());
         Optional<User> userEntity = userRepository.findById(userAttempt.getUserId());
-        User user = userEntity.orElseGet(() -> createNewUser(userAttempt.getUserId()));
+        User user = userEntity.orElseGet(() -> new User(userAttempt.getUserId()));
         applyNewProblemSolved(userAttempt.getProgrammingLanguage(), user, userAttempt.getProblemId(), scoreToBeAdded);
         user.setBadges(findBadgesToEarn(user));
         userRepository.save(user);
         dispatchUserStatusUpdatedEvent(user);
     }
+
 
     private void dispatchUserStatusUpdatedEvent(User user) {
         UserStatusUpdatedEvent userStatusUpdatedEvent = UserStatusUpdatedEvent.builder()
@@ -78,18 +81,6 @@ public class GameServiceImpl implements GameService {
                 .collect(Collectors.toSet());
     }
 
-
-    private User createNewUser(String userId) {
-        Map<ProgrammingLanguage, Set<String>> programmingLanguageToSolvedProblems =
-                EnumSet.allOf(ProgrammingLanguage.class)
-                        .stream()
-                        .collect(Collectors.toMap(Function.identity(), language -> Collections.emptySet()));
-        return User.builder()
-                .userId(userId)
-                .badges(Collections.emptySet())
-                .programmingLanguageToSolvedProblems(programmingLanguageToSolvedProblems)
-                .build();
-    }
 
     private int getProblemScore(String problemId) {
         return problemRepository.findById(problemId)
