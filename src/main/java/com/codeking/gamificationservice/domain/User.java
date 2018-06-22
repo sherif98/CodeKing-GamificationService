@@ -20,6 +20,8 @@ public class User {
     @Id
     private String userId;
 
+    private String userName;
+
     private Set<Badge> badges;
 
     @Indexed
