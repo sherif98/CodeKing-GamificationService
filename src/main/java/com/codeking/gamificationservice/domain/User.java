@@ -5,10 +5,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.Collections;
-import java.util.EnumSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -37,7 +34,7 @@ public class User {
     public User() {
         badges = Collections.emptySet();
         programmingLanguageToSolvedProblems = EnumSet.allOf(ProgrammingLanguage.class).stream()
-                .collect(Collectors.toMap(Function.identity(), language -> Collections.emptySet()));
+                .collect(Collectors.toMap(Function.identity(), language -> new HashSet<>()));
     }
 
     public User(String userId) {

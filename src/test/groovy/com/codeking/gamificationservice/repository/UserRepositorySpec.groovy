@@ -1,14 +1,14 @@
 package com.codeking.gamificationservice.repository
 
+import com.codeking.gamificationservice.GamificationServiceApplication
 import com.codeking.gamificationservice.domain.User
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment
 import spock.lang.Specification
 import spock.lang.Subject
 
 @Subject(UserRepository)
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@SpringBootTest(classes = GamificationServiceApplication.class)
 class UserRepositorySpec extends Specification {
 
     @Autowired
